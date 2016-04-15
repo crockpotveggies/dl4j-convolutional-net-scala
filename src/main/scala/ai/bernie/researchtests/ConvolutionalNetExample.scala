@@ -15,6 +15,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.api.IterationListener
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
+import org.deeplearning4j.ui.weights.HistogramIterationListener
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.lossfunctions.LossFunctions
@@ -141,6 +142,7 @@ object ConvolutionalNetExample {
 
         log.info("Train model....")
         model.setListeners(Collections.singletonList(new ScoreIterationListener(listenerFreq).asInstanceOf[IterationListener]))
+        model.setListeners(new HistogramIterationListener(1))
 
 
         while(dataSetIterator.hasNext) {
