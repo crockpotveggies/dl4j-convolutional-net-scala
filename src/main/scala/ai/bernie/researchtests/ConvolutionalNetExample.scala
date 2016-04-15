@@ -25,9 +25,9 @@ import scala.collection.mutable
 
 
 /**
-  * This object is an exmaple to demonstrate a classifier of ethnicity using the
+  * This object is an example to demonstrate a basic classifier of a dataset in the
   * Deeplearning4j framework. This test trains a convolutional neural network on
-  * a dataset of your choice. You may adjust the layers as much as your want.
+  * a dataset of your choice. You may adjust the layers as much as you want.
   *
   */
 
@@ -53,6 +53,7 @@ object ConvolutionalNetExample {
         log.info("Load data.....")
 
         // below we load our dataset using Canova's ImageRecord Reader
+        // (Canova is a data library written by the DL4J team)
         // each class of images can be placed in their own indexed directory, and the name of
         // the directory will be appended to our labels list
         val labels = new java.util.ArrayList[String]()
@@ -141,7 +142,9 @@ object ConvolutionalNetExample {
         model.init()
 
         log.info("Train model....")
+        // this listener fires with each minibatch training iteration
         model.setListeners(Collections.singletonList(new ScoreIterationListener(listenerFreq).asInstanceOf[IterationListener]))
+        // the histogram listener will start up a server and display data about the net
         model.setListeners(new HistogramIterationListener(1))
 
 
