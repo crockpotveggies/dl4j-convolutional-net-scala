@@ -35,6 +35,8 @@ object ConvolutionalNetExample {
     lazy val log: Logger = LoggerFactory.getLogger(ConvolutionalNetExample.getClass)
 
     def main(args: Array[String]) = {
+
+        // neural network parameters
         val imageWidth = 100
         val imageHeight = 100
         val nChannels = 1
@@ -62,6 +64,7 @@ object ConvolutionalNetExample {
         recordReader.initialize(new FileSplit(file))
 
         println(s"Labels size: ${labels.size()}") // note, ImageRecordReader automatically detects the parent directories of classes and adds them to labels list
+        //assert(outputNum==labels.size)
 
         // use carefully...
         //val dataSetIterator: DataSetIterator = new RecordReaderDataSetIterator(recordReader, batchSize, imageWidth*imageHeight*nChannels, labels.size())

@@ -1,0 +1,81 @@
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+  }
+}
+
+apply plugin: 'scala'
+apply plugin: 'application'
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+description = """dl4j-convolutional-net-scala"""
+
+group = 'ai.bernie'
+version = '0.1-SNAPSHOT'
+applicationName = 'bernie-api'
+mainClassName = 'ai.bernie.researchtests.ConvolutionalNetExample'
+compileJava.options.encoding = 'UTF-8'
+
+applicationDefaultJvmArgs = ["-Dgreeting.language=en","-Xms512m","-Xmx6000m"]
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+//  maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+//  flatDir(dirs: 'cnn_dataset')
+}
+
+tasks.withType(ScalaCompile) {
+  configure(scalaCompileOptions.forkOptions) {
+    scalaCompileOptions.useAnt = false
+    scalaCompileOptions.useCompileDaemon = true
+    memoryMaximumSize = '4g'
+  }
+  scalaCompileOptions.useAnt = false
+  sourceCompatibility = "1.8"
+  targetCompatibility = "1.8"
+//  useCompileDaemon = true
+}
+
+configurations {
+  all {
+    exclude group: 'org.mortbay.jetty'
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    exclude group: 'log4j', module: 'log4j'
+    exclude group: 'org.fusesource.scalate'
+    exclude group: 'com.sun.jersey.jersey-test-framework', module: 'jersey-test-framework-grizzly2'
+    exclude group: 'com.sun.jersey', module: 'jersey-json'
+    exclude group: 'com.sun.jersey', module: 'jersey-core'
+  }
+}
+
+dependencies {
+  testCompile group: 'junit', name: 'junit', version: '4.11'
+  testCompile 'org.scalatest:scalatest_2.10:3.0.0-M7'
+  compile "org.scala-lang:scala-library:2.10.5"
+  compile "org.scala-lang:scala-compiler:2.10.5"
+  compile "org.scala-lang:scala-reflect:2.10.5"
+
+  compile 'org.deeplearning4j:deeplearning4j-nlp:0.4-rc3.8'
+  compile 'org.deeplearning4j:deeplearning4j-ui:0.4-rc3.8'
+  compile 'org.deeplearning4j:dl4j-spark:0.4-rc3.8'
+  compile 'org.nd4j:nd4j-x86:0.4-rc3.8'
+  compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+
+  compile 'javax.mail:javax.mail-api:1.5.5'
+  compile 'org.glassfish.jersey.core:jersey-server:2.22.2'
+  compile 'org.glassfish.jersey.containers:jersey-container-servlet-core:2.22.2'
+  compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.22.2'
+}
+
+jar {
+  from sourceSets.main.allScala
+}
+
+shadowJar {
+  transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer) {
+    resource = 'reference.conf'
+  }
+}a
